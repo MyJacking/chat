@@ -1,5 +1,16 @@
 import { onMounted, onUpdated } from 'vue'
 
+function copyToClipboard(text: string) {
+	let textarea = document.createElement("textarea");
+	textarea.value = text;
+	textarea.style.position = "fixed";
+	document.body.appendChild(textarea);
+	textarea.focus();
+	textarea.select();
+	document.execCommand("copy");
+	document.body.removeChild(textarea);
+}
+
 export function useCopyCode() {
   function copyCodeBlock() {
     const codeBlockWrapper = document.querySelectorAll('.code-block-wrapper')
@@ -8,8 +19,7 @@ export function useCopyCode() {
       const codeBlock = wrapper.querySelector('.code-block-body')
       if (copyBtn && codeBlock) {
         copyBtn.addEventListener('click', () => {
-					console.log(navigator.clipboard, '-------navigator.clipboard')
-          navigator.clipboard.writeText(codeBlock.textContent ?? '')
+					copyToClipboard(codeBlock.textContent ?? '')
         })
       }
     })
