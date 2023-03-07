@@ -113,6 +113,7 @@ async function chatReplyProcess(
     const response = await api.sendMessage(message, {
       ...options,
       onProgress: (partialResponse) => {
+				console.log(partialResponse.text, '------------', process)
         process?.(partialResponse)
 			},
     })

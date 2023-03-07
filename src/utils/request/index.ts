@@ -6,6 +6,7 @@ export interface HttpOption {
   data?: any
   method?: string
   headers?: any
+	responseType?: string
   onDownloadProgress?: (progressEvent: AxiosProgressEvent) => void
   signal?: GenericAbortSignal
   beforeRequest?: () => void
@@ -59,13 +60,14 @@ export function get<T = any>(
 }
 
 export function post<T = any>(
-  { url, data, method = 'POST', headers, onDownloadProgress, signal, beforeRequest, afterRequest }: HttpOption,
+  { url, data, method = 'POST', headers, onDownloadProgress, signal, beforeRequest, afterRequest, responseType }: HttpOption,
 ): Promise<Response<T>> {
   return http<T>({
     url,
     method,
     data,
     headers,
+		responseType,
     onDownloadProgress,
     signal,
     beforeRequest,
