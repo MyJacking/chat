@@ -9,6 +9,14 @@ import type { ApiModel, ChatContext, ChatGPTUnofficialProxyAPIOptions, ModelConf
 
 dotenv.config()
 
+const ErrorCodeMessage: Record<string, string> = {
+	401: '提供错误的API密钥 | Incorrect API key provided',
+	429: '服务器限流，请稍后再试 | Server was limited, please try again later',
+	503: '服务器繁忙，请稍后再试 | Server is busy, please try again later',
+	500: '服务器繁忙，请稍后再试 | Server is busy, please try again later',
+	403: '服务器拒绝访问，请稍后再试 | Server refused to access, please try again later',
+}
+
 const timeoutMs: number = !isNaN(+process.env.TIMEOUT_MS) ? +process.env.TIMEOUT_MS : 30 * 1000
 
 let apiModel: ApiModel
@@ -102,19 +110,21 @@ async function chatReplyProcess(
 
     if (lastContext)
       options = { ...lastContext }
-
     const response = await api.sendMessage(message, {
       ...options,
       onProgress: (partialResponse) => {
+				console.log(partialResponse.text, '------------text')
         process?.(partialResponse)
-      },
+			},
     })
-
     return sendResponse({ type: 'Success', data: response })
   }
-  catch (error: any) {
-    return sendResponse({ type: 'Fail', message: error.message })
-  }
+	catch (error: any) {
+		const code = error.statusCode || 'unknown'
+		if (Reflect.has(ErrorCodeMessage, code))
+			return sendResponse({ type: 'Fail', message: ErrorCodeMessage[code] })
+		return sendResponse({ type: 'Fail', message: `${error.statusCode}-${error.statusText}` })
+	}
 }
 
 async function chatConfig() {
