@@ -13,7 +13,7 @@ services:
       # API接口地址，可选，设置 OPENAI_API_KEY 时可用
       OPENAI_API_BASE_URL:
       # 反向代理，可选
-      API_REVERSE_PROXY: https://gpt.pawan.krd/backend-api/conversation
+      API_REVERSE_PROXY:
       # 超时，单位毫秒，可选
       TIMEOUT_MS: 60000
       # Socks代理，可选，和 SOCKS_PROXY_PORT 一起时生效
