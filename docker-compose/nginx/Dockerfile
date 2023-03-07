@@ -1,4 +1,4 @@
-FROM hub.c.163.com/library/nginx
+FROM nginx:1.12.1-alpine
 
 MAINTAINER jo "tionsin@live.com"
 
