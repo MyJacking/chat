@@ -114,6 +114,7 @@ async function chatReplyProcess(
       ...options,
       onProgress: (partialResponse) => {
 				console.log(partialResponse.text, '------------text')
+				console.log(process, '------------process')
         process?.(partialResponse)
 			},
     })
