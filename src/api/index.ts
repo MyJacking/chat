@@ -29,6 +29,9 @@ export function fetchChatAPIProcess<T = any>(
   return post<T>({
     url: '/chat-process',
     data: { prompt: params.prompt, options: params.options },
+		headers: {
+			'Authorization': 'Bearer ' + localStorage.Authorization,
+		},
     signal: params.signal,
     onDownloadProgress: params.onDownloadProgress,
 		responseType: 'stream'

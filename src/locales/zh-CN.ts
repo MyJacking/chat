@@ -36,6 +36,8 @@ export default {
     reverseProxy: '反向代理',
     timeout: '超时',
     socks: 'Socks',
+    key: '密钥',
+		是否开启连续对话: '是否连续对话',
   },
 
 }

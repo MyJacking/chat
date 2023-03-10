@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { NButton, NInput, useMessage } from 'naive-ui'
+import { NButton, NInput, useMessage, NSwitch } from 'naive-ui'
 import type { Language, Theme } from '@/store/modules/app/helper'
 import { SvgIcon } from '@/components/common'
 import { useAppStore, useUserStore } from '@/store'
@@ -27,6 +27,20 @@ const avatar = ref(userInfo.value.avatar ?? '')
 const name = ref(userInfo.value.name ?? '')
 
 const description = ref(userInfo.value.description ?? '')
+
+const keys = ref('')
+
+function setKeys() {
+	localStorage.Authorization = keys.value
+	ms.success(t('common.success'))
+}
+
+// 是否连续对话
+const continuous = computed(() => appStore.continuousDialogue)
+
+function changeContinuous(value: boolean) {
+	appStore.setContinuousDialogue(value)
+}
 
 const language = computed({
   get() {
@@ -140,6 +154,23 @@ function handleReset() {
           </template>
         </div>
       </div>
+
+			<div class="flex items-center space-x-4">
+				<span class="flex-shrink-0 w-[100px]">{{ $t('setting.key') }}</span>
+				<div class="flex items-center space-x-4">
+					<NInput v-model:value="keys" />
+					<NButton text type="primary" @click="setKeys">
+						{{ $t('common.save') }}
+					</NButton>
+				</div>
+			</div>
+
+			<div class="flex items-center space-x-4">
+				<span class="flex-shrink-0 w-[100px]">{{ $t('setting.是否开启连续对话') }}</span>
+				<div class="flex items-center space-x-4">
+					<NSwitch v-model:value="continuous" @change="changeContinuous" />
+				</div>
+			</div>
     </div>
   </div>
 </template>

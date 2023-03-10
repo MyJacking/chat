@@ -6,6 +6,13 @@ import { store } from '@/store'
 export const useAppStore = defineStore('app-store', {
   state: (): AppState => getLocalSetting(),
   actions: {
+
+		setContinuousDialogue(continuousDialogue: boolean) {
+			this.continuousDialogue = continuousDialogue
+			localStorage.continuousDialogue = continuousDialogue
+			this.recordState()
+		},
+
     setSiderCollapsed(collapsed: boolean) {
       this.siderCollapsed = collapsed
       this.recordState()

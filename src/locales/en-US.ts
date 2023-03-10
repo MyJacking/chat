@@ -36,6 +36,8 @@ export default {
     reverseProxy: 'Reverse Proxy',
     timeout: 'Timeout',
     socks: 'Socks',
+    key: 'key',
+		是否开启连续对话: 'Continuous Dialogue',
   },
 
 }

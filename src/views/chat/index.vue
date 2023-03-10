@@ -8,7 +8,7 @@ import { useChat } from './hooks/useChat'
 import { useCopyCode } from './hooks/useCopyCode'
 import { HoverButton, SvgIcon } from '@/components/common'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
-import { useChatStore } from '@/store'
+import {useAppStore, useChatStore} from '@/store'
 import { fetchChatAPIProcess } from '@/api'
 import { t } from '@/locales'
 
@@ -17,6 +17,7 @@ let controller = new AbortController()
 const route = useRoute()
 const dialog = useDialog()
 
+const appStore = useAppStore()
 const chatStore = useChatStore()
 
 nextTick(() => {
@@ -30,6 +31,9 @@ const { uuid } = route.params as { uuid: string }
 
 const dataSources = computed(() => chatStore.getChatByUuid(+uuid))
 const conversationList = computed(() => dataSources.value.filter(item => (!item.inversion && !item.error)))
+
+// 是否连续对话
+const continuous = computed(() => appStore.continuousDialogue)
 
 const prompt = ref<string>('')
 const loading = ref<boolean>(false)
@@ -66,7 +70,11 @@ async function onConversation() {
   prompt.value = ''
 
   let options: Chat.ConversationRequest = {}
-  const lastContext = conversationList.value[conversationList.value.length - 1]?.conversationOptions
+  let lastContext = conversationList.value[conversationList.value.length - 1]?.conversationOptions
+
+	if (!continuous.value) {
+		lastContext = undefined
+	}
 
   if (lastContext)
     options = { ...lastContext }
@@ -100,7 +108,7 @@ async function onConversation() {
           chunk = responseText.substring(lastIndex)
         try {
           const data = JSON.parse(chunk)
-					console.log(data.text, '-------data')
+					console.log(data, '-------data')
           updateChat(
             +uuid,
             dataSources.value.length - 1,

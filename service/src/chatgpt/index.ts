@@ -101,7 +101,11 @@ async function chatReplyProcess(
   message: string,
   lastContext?: { conversationId?: string; parentMessageId?: string },
   process?: (chat: ChatMessage) => void,
+	auth: boolean = false,
 ) {
+	if (auth)
+		return sendResponse({ type: 'Fail', message: '您暂未授权!' })
+
   if (!message)
     return sendResponse({ type: 'Fail', message: 'Message is empty' })
 
@@ -113,7 +117,6 @@ async function chatReplyProcess(
     const response = await api.sendMessage(message, {
       ...options,
       onProgress: (partialResponse) => {
-				console.log(partialResponse.text, '------------', process)
         process?.(partialResponse)
 			},
     })

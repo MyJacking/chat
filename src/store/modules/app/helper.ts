@@ -1,4 +1,4 @@
-import { ss } from '@/utils/storage'
+import {ss} from '@/utils/storage'
 
 const LOCAL_NAME = 'appSetting'
 
@@ -7,20 +7,26 @@ export type Theme = 'light' | 'dark' | 'auto'
 export type Language = 'zh-CN' | 'en-US'
 
 export interface AppState {
-  siderCollapsed: boolean
-  theme: Theme
-  language: Language
+	siderCollapsed: boolean
+	theme: Theme
+	language: Language
+	continuousDialogue: boolean
 }
 
 export function defaultSetting(): AppState {
-  return { siderCollapsed: false, theme: 'light', language: 'zh-CN' }
+	return {
+		siderCollapsed: false,
+		theme: 'light',
+		language: 'zh-CN',
+		continuousDialogue: Boolean(localStorage.continuousDialogue) || false,
+	}
 }
 
 export function getLocalSetting(): AppState {
-  const localSetting: AppState | undefined = ss.get(LOCAL_NAME)
-  return { ...defaultSetting(), ...localSetting }
+	const localSetting: AppState | undefined = ss.get(LOCAL_NAME)
+	return {...defaultSetting(), ...localSetting}
 }
 
 export function setLocalSetting(setting: AppState): void {
-  ss.set(LOCAL_NAME, setting)
+	ss.set(LOCAL_NAME, setting)
 }
